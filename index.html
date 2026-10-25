@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ciptc 刷课 Cookie 提取工具</title>
+<style>
+  :root{--fg:#1a1a2e;--muted:#666;--accent:#07c;--border:#ddd;--card:#f7f8fa}
+  body{margin:0;padding:16px;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--fg);background:transparent;line-height:1.6}
+  h1{font-size:20px;margin:0 0 12px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px}
+  .step{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start}
+  .num{flex:0 0 22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;text-align:center;line-height:22px;font-size:13px;font-weight:700}
+  .step b{color:var(--fg)}
+  .muted{color:var(--muted);font-size:13px}
+  .bookmark{display:inline-block;padding:10px 18px;background:var(--accent);color:#fff !important;border-radius:8px;text-decoration:none;font-weight:600;margin:4px 0;cursor:grab}
+  .btn{display:block;width:100%;padding:12px;border:0;border-radius:8px;background:var(--accent);color:#fff;font-size:16px;font-weight:600;margin-top:8px}
+  code{background:#eef;padding:2px 6px;border-radius:4px;font-size:13px;word-break:break-all}
+  textarea{width:100%;height:90px;border:1px solid var(--border);border-radius:8px;padding:8px;font-family:monospace;font-size:11px;box-sizing:border-box;background:#fff}
+</style>
+</head>
+<body>
+<h1>ciptc 平台 Cookie 提取书签</h1>
+
+<div class="card">
+  <div class="step"><span class="num">1</span><div><b>先登录平台</b><br><span class="muted">用手机浏览器登录 <code>suining.ciptc.org.cn</code>（或任意 ciptc 平台页面），保持登录状态。</span></div></div>
+  <div class="step"><span class="num">2</span><div><b>复制书签码</b><br><span class="muted">点击下方按钮复制书签代码。</span></div></div>
+  <div class="step"><span class="num">3</span><div><b>新建书签</b><br><span class="muted">浏览器菜单 → 书签 → 添加书签 → 名称随意，<b>URL 粘贴刚复制的书签码</b>（不是网页地址）。</span></div></div>
+  <div class="step"><span class="num">4</span><div><b>回到平台页面点书签</b><br><span class="muted">在已登录的平台页面打开该书签，会弹出 Cookie 框。</span></div></div>
+  <div class="step"><span class="num">5</span><div><b>复制 Cookie</b><br><span class="muted">点「复制 Cookie」按钮，然后发给刷课脚本即可（<code>--cookie '粘贴'</code>）。</span></div></div>
+</div>
+
+<div class="card">
+  <b>电脑用户</b>：直接把这个按钮拖进书签栏 →
+  <a class="bookmark" id="bm" href="javascript:void(0)">提取Cookie</a>
+  <div class="muted" style="margin-top:6px">拖不进去就右键 → 复制链接地址，再手动新建书签粘贴。</div>
+</div>
+
+<div class="card">
+  <b>手机用户</b>：点下面按钮复制书签码，然后按步骤 3 新建书签。
+  <button class="btn" id="copyCode">📋 复制书签码</button>
+  <div class="muted" style="margin-top:8px">书签码预览（也可手动全选复制）：</div>
+  <textarea id="codeBox" readonly></textarea>
+</div>
+
+<div class="card muted">
+  ⚠️ 提示：书签必须<b>在已登录的 suining.ciptc.org.cn 页面内点击</b>才有效；在别的网页点会显示空 Cookie。iOS Safari 书签编辑需在「添加书签」后点「编辑」把地址改成书签码。
+</div>
+
+<script>
+var CODE = 'javascript:(function(){var d=document.createElement("div");d.style.cssText="position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,.75);z-index:2147483647;display:flex;align-items:center;justify-content:center";var b=document.createElement("div");b.style.cssText="background:#fff;padding:16px;border-radius:10px;width:92%;max-width:560px;box-sizing:border-box";b.innerHTML=\'<div style="margin-bottom:8px;font:14px/1.4 sans-serif;color:#333">Cookie 已取出，点按钮复制：</div><textarea id="__ck" readonly style="width:100%;height:120px;font:12px/1.4 monospace;word-break:break-all;box-sizing:border-box"></textarea><button id="__cp" style="margin-top:10px;padding:10px 26px;font:16px/1 sans-serif;border:0;border-radius:6px;background:#07c;color:#fff">复制 Cookie</button>\';document.getElementById("__ck").value=document.cookie;d.appendChild(b);document.body.appendChild(d);document.getElementById("__cp").onclick=function(){var t=document.getElementById("__ck");t.focus();t.select();t.setSelectionRange(0,99999);document.execCommand("copy");this.textContent="已复制 ✓"};})();';
+document.getElementById('bm').setAttribute('href', CODE);
+document.getElementById('codeBox').value = CODE;
+document.getElementById('copyCode').onclick = function(){
+  var ta = document.getElementById('codeBox');
+  ta.select();
+  try{navigator.clipboard.writeText(CODE).then(function(){})}catch(e){}
+  document.execCommand('copy');
+  this.textContent = '已复制 ✓ 去浏览器新建书签粘贴';
+};
+</script>
+</body>
+</html>
